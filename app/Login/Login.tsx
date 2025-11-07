@@ -2,12 +2,25 @@
 
 import { Box, Button, Container } from "@radix-ui/themes";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const [formData, setFormData] = React.useState({
     username: "",
     password: "",
   });
+  const [error, setError] = React.useState("");
+  React.useEffect(() => {
+  if (!error) return;
+
+  const timer = setTimeout(() => {
+    setError(""); // hide error after 4 seconds
+  }, 1000);
+
+  return () => clearTimeout(timer); // cleanup if error changes
+}, [error]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,6 +31,15 @@ const Login = () => {
     e.preventDefault();
     // Handle login logic here
     console.log("Logging in with", formData);
+    // Example: simple login check
+    if (formData.username === "admin" && formData.password === "1234") {
+      console.log("Login successful");
+
+      // Navigate to dashboard or home page
+      router.push("/dashboard");
+    } else {
+      setError("Invalid username or password");
+    }
   };
   return (
     <Box className="flex h-screen items-center justify-center bg-[var(--background)] text-[var(--foreground)]">
@@ -48,6 +70,9 @@ const Login = () => {
           onSubmit={handleSubmit}
           className="flex flex-col items-center justify-center gap-3"
         >
+          {error && (
+            <p className="text-red-500 text-sm">{error}</p>
+          )}
           <input
             type="text"
             name="username"
@@ -73,6 +98,7 @@ const Login = () => {
         </form>
       </Container>
     </Box>
+    
   );
 };
 
