@@ -1,5 +1,12 @@
-import Image from "next/image";
+'use client';
+import "@radix-ui/themes/styles.css";
+import { Theme } from "@radix-ui/themes";
+import App from "./App";
 
 export default function Home() {
-  return <h1> Tenant Care</h1>;
+  return (
+    <Theme>
+      <App />
+    </Theme>
+  );
 }
